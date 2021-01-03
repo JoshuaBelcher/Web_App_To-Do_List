@@ -4,6 +4,7 @@ const filters = {
     hideCompleted: false
 }
 
+// get and set functions for filter selections
 const getFilters = () => filters
 
 const setFilters  = ({ searchText, hideCompleted }) => {

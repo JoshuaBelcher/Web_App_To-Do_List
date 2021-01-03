@@ -1,23 +1,29 @@
 import { getFilters } from './filters'
 import { getTodos, saveTodos, toggleTodo, removeTodo } from './todos'
 
-// Render list of todos based on filter
+/*----function for rendering the list of existing todo items ----*/
+
+// render the list of todo items based on text and completion filters specified by user
 const renderToDoList = () => {
     const todoEl = document.querySelector('#filtered-tasks')
     const unfilteredTodos = getTodos()
-    const { searchText, hideCompleted} = getFilters()
+    const { searchText, hideCompleted } = getFilters()
     const filteredTodos = unfilteredTodos.filter ((todo) => {
         const searchMatch = todo.text.toLowerCase().includes(searchText.toLowerCase())
         const completeMatch = !hideCompleted || !todo.complete
         return searchMatch && completeMatch
     })
 
+    // creates an array containing only incomplete tasks (used for remaining task message display)
     const filteredIncompleteTodos = filteredTodos.filter ((task) => !task.complete)
 
+    // blanks HTML element that displays the list to prepare for new display
     todoEl.innerHTML = ""
 
+    // displays remaining tasks message
     todoEl.appendChild(generateSummaryDOM(filteredIncompleteTodos))
     
+    // if any tasks exist after filtering, they are displayed
     if (filteredTodos.length > 0) {
         filteredTodos.forEach ((todo) => {
             todoEl.appendChild(generateTodoDOM(todo))
@@ -30,7 +36,7 @@ const renderToDoList = () => {
     }
 }
 
-//get the DOM elements for an individual note
+// create the DOM elements for an individual note
 const generateTodoDOM = (todo) => {
     const todoResult = document.createElement('label')
     const containerEl = document.createElement('div')
@@ -66,7 +72,7 @@ const generateTodoDOM = (todo) => {
     return todoResult
 }
 
-// get the DOM elements for list summary
+// get the DOM elements for remaining tasks summary
 const generateSummaryDOM = (filteredIncompleteTodos) => {
     const plural = (filteredIncompleteTodos.length === 1) ? '' : 's'
     const summaryEl = document.createElement('h2')
